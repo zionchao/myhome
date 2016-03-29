@@ -90,7 +90,58 @@ def tagDetail(request,tag):
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
     date_list=Article.date_list.get_Article_onDate()
     return render(request,'index.html',locals())
-
-
-
-
+	
+def about(request):
+    classfication=Classification.class_list.get_Class_list()
+	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+	date_list=Article.date_list.get_Article_onDate()
+	return render(request,'about.html',locals())
+	
+def archive(request):
+    archive=Article.date_list.get_Article_onArchive()
+	ar_newpost=Article.objects.order_by('-publis_time')[:10]
+	classfication=Classification.class_list.get_Class_list()
+	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+	date_list=Article.date_list.get_Article_onDate()
+	return render(request,'archive.html',locals())
+	
+class RSSFeed(Feed):
+    title='RSS feed - zionchao'
+	link="feeds/posts/"
+	description="RSS Feed -blog posts"
+	
+	def items(self):
+	    return Article.objects.order_by('-publish_time')
+	
+	def item_title(self,item):
+	    return item.title
+		
+	def item_pubdate(self,item):
+	    return item.publish_time
+	
+	def item_description(self,item):
+	    return item.content
+		
+def blog_search(request):
+    is_search=True
+	classification=Classification.class_list.get_Class_list()
+	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+	date_list=Article.date_list.get_Article_onDate()
+	error=False
+	
+	if 's' in request.GET:
+	    s=request.GET['s']
+		if not s:
+		    return render(request,'index.html')
+		else:
+		    articles=Article.objects.filter(title__icontanis==s)
+			if len(articles)==0
+			    error=True
+				
+	return render(request,'index.html',locals())
+	
+def message(request):
+    classification=Classification.class_list.get_Class_list()
+	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+	date_list=Article.date_list.get_Article_onDate()
+	return render(request,'message.html',locals())
