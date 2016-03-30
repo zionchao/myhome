@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block title%}
-    {{article.title}}|ÕÅ³¬µÄĞ¡Õ¾
+    {{article.title}}|å¼ è¶…çš„å°ç«™
 {% endblock %}
 {% block path %}
-    <a href="{% url 'home'%}">µ±Ç°Î»ÖÃ&nbsp;:&nbsp;Ê×Ò³&nbsp;</a>?&nbsp;ÎÄÕÂ·ÖÀà&nbsp;:&nbsp;<a href="{%  url 'classfiDetail' classfi=article.classification %}">{{article.classification}}&nbsp;</a>?&nbsp; 
+    <a href="{% url 'home'%}">å½“å‰ä½ç½®&nbsp;:&nbsp;é¦–é¡µ&nbsp;</a>>>&nbsp;æ–‡ç« åˆ†ç±»&nbsp;:&nbsp;<a href="{%  url 'classfiDetail' classfi=article.classification %}">{{article.classification}}&nbsp;</a>
+Â»&nbsp; {{article.title}}
 {% endblock%}
 {% block content%}
 <div class="archive">
@@ -12,9 +13,9 @@
 	    <div class="entry-info">
 		    <span class="entry-date">
 			    <span class="glyphicon glyphicon-canlendar" aria-hidden="true"></span>
-				{{article.publish_time.year}}Äê{{article.publish_time.month}}ÔÂ{{article.publish_time.day}}ÈÕ
+				{{article.publish_time.year}}å¹´{{article.publish_time.month}}æœˆ{{article.publish_time.day}}æ—¥
 			 </span>
-			 <span class="author vcard"
+			 <span class="author vcard">
 			     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				 Kevin
 			 </span>
@@ -28,9 +29,9 @@
 		</h1>
 		
 		<div class="post-format-indicator">
-		    <a class="entry-format" href="{{article.get_absolute_url"}}</div>
+		    <a class="entry-format" href="{{article.get_absolute_url}}"></a>
 		</div>
-		
+		</header>
 		<div>
 			{{article.content|safe}}
 			<div class="clearfix"></div>
@@ -39,7 +40,7 @@
 		    <div class="fenlei">
 			    <span class="entry-categories">
 				    <span class="glyphicon georgian-folder-close" aria-hidden="true"></span>
-					<a href="{% url 'classfiDetail' classfi=article.classification rel='categories'%}">{{article.classification}}</a>
+					<a href="{% url 'classfiDetail' classfi=article.classification%}"  rel='category'>{{article.classification}}</a>
 				</span>
 				<span class="entry-tags">
 				    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
@@ -50,30 +51,30 @@
 			</div>
 		
 		    <div class="jiathis_style" style="float:right;">
-			    <span class="jiathis_txt">·ÖÏíµ½£º</span>
-				<span class="jiathis_button_qzone">QQ¿Õ¼ä</span>
-				<a class="jiathis_button_tsina">ĞÂÀËÎ¢²©</a>
-		        <a class="jiathis_button_weixin">Î¢ĞÅ</a>
+			    <span class="jiathis_txt">åˆ†äº«åˆ°ï¼š</span>
+				<a class="jiathis_button_qzone">QQç©ºé—´</a>
+				<a class="jiathis_button_tsina">æ–°æµªå¾®åš</a>
+		        <a class="jiathis_button_weixin">å¾®ä¿¡</a>
 			</div>
 		</footer>
 	</div>
 </div>
     {%if article.get_before_article %}
 	    {%with before=article.get_before_article%}
-		<p class="p1">ÉÏÒ»Æª<a href="{{before.get_absolute_url}}">{{before}}</a></p>
+		<p class="p1">ä¸Šä¸€ç¯‡<a href="{{before.get_absolute_url}}">{{before}}</a></p>
 		{% endwith%}
 	{% endif %}
 	
 	{% if article.get_after_article%}
 	    {%with after=article.get_after_article%}
-		<p class="p2">ÏÂÒ»Æª <a href="{{ after.get_absolute_url }}">{{after}} </a></p> 
+		<p class="p2">ä¸‹ä¸€ç¯‡ <a href="{{ after.get_absolute_url }}">{{after}} </a></p> 
   		 {% endwith %}
     {% endif %}
 	
-	{%include "_comments.html"%}
+	{% include "_comments.html" %}
 {%endblock%}
 	
 	{%block side%}
-	    {%"_side.html"%}
+	    {% include "_side.html"%}
 	{%endblock%}
 		

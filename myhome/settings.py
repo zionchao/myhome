@@ -113,7 +113,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = "/var/www/example.com/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),
                     os.path.join(BASE_DIR,'static/lib'),os.path.join(BASE_DIR,'static/css'),os.path.join(BASE_DIR,'static/tinymce'),)
 
 MEDIA_URL = '/media/'

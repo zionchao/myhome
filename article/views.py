@@ -5,7 +5,9 @@ from django.template import RequestContext
 from django.http import HttpResponse,Http404
 from models import Article,Classification,Tag
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.contrib.syndication.views import Feed
 import json
+from django.core import serializers
 # Create your views here.
 
 def home(request):
@@ -20,8 +22,9 @@ def home(request):
     except EmptyPage:
         articles=paginator.page(paginator.num_pages)
 
-    classfication=Classification.class_list.get_Class_list()
+    classification=Classification.class_list.get_Class_list()
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+
     date_list=Article.date_list.get_Article_onDate()
     return render(request,'index.html',locals())
     # return render_to_response('index.html',
@@ -34,17 +37,18 @@ def detail(request,year,month,day,id):
         article=Article.objects.get(id=str(id))
     except Article.DoesNotExist:
         raise Http404
-    classfication=Classification.class_list.get_Class_list()
+    classification=Classification.class_list.get_Class_list()
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
     date_list=Article.date_list.get_Article_onDate()
 
-    return render(request,'content,html',locals())
+    return render(request,'content.html',locals())
 
 def archive_month(request,year,month):
     is_arch_month=True
     articles=Article.objects.filter(publish_time__year=year).fileter(publish_time__month=month)
     paginator=Paginator(articles,6)
     page_num=request.GET.get('page')
+    date_list = Article.date_list.get_Article_onDate()
     try:
         articles=paginator.page(page_num)
     except PageNotAnInteger:
@@ -54,7 +58,7 @@ def archive_month(request,year,month):
 
     classification=Classification.class_list.get_Class_list()
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
-    return render(request,'inddex.html',locals())
+    return render(request,'index.html',locals())
 
 def classfiDetail(request,classfi):
     is_classfi=True
@@ -68,7 +72,7 @@ def classfiDetail(request,classfi):
         articles=paginator.page(1)
     except EmptyPage:
         articles=paginator.page(paginator.num_pages)
-    classfication=Classification.class_list.get_Class_list()
+    classification=Classification.class_list.get_Class_list()
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
     date_list=Article.date_list.get_Article_onDate()
 
@@ -93,55 +97,53 @@ def tagDetail(request,tag):
 	
 def about(request):
     classfication=Classification.class_list.get_Class_list()
-	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
-	date_list=Article.date_list.get_Article_onDate()
-	return render(request,'about.html',locals())
+    tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+    date_list=Article.date_list.get_Article_onDate()
+    return render(request,'about.html',locals())
 	
 def archive(request):
     archive=Article.date_list.get_Article_onArchive()
-	ar_newpost=Article.objects.order_by('-publis_time')[:10]
-	classfication=Classification.class_list.get_Class_list()
-	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
-	date_list=Article.date_list.get_Article_onDate()
-	return render(request,'archive.html',locals())
+    ar_newpost=Article.objects.order_by('-publis_time')[:10]
+    classfication=Classification.class_list.get_Class_list()
+    tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+    date_list=Article.date_list.get_Article_onDate()
+    return render(request,'archive.html',locals())
 	
 class RSSFeed(Feed):
     title='RSS feed - zionchao'
-	link="feeds/posts/"
-	description="RSS Feed -blog posts"
-	
-	def items(self):
-	    return Article.objects.order_by('-publish_time')
-	
-	def item_title(self,item):
-	    return item.title
-		
-	def item_pubdate(self,item):
-	    return item.publish_time
-	
-	def item_description(self,item):
-	    return item.content
+    link="feeds/posts/"
+    description="RSS Feed -blog posts"
+
+    def items(self):
+        return Article.objects.order_by('-publish_time')
+
+    def item_title(self,item):
+        return item.title
+
+    def item_pubdate(self,item):
+        return item.publish_time
+
+    def item_description(self,item):
+        return item.content
 		
 def blog_search(request):
     is_search=True
-	classification=Classification.class_list.get_Class_list()
-	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
-	date_list=Article.date_list.get_Article_onDate()
-	error=False
-	
-	if 's' in request.GET:
-	    s=request.GET['s']
-		if not s:
-		    return render(request,'index.html')
-		else:
-		    articles=Article.objects.filter(title__icontanis==s)
-			if len(articles)==0
-			    error=True
-				
+    classification=Classification.class_list.get_Class_list()
+    tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+    date_list=Article.date_list.get_Article_onDate()
+    error=False
+    if 's' in request.GET:
+        s=request.GET['s']
+        if not s:
+            return render(request,'index.html')
+        else:
+            articles=Article.objects.filter(title__icontains=s)
+            if len(articles)==0:
+                error=True
 	return render(request,'index.html',locals())
 	
 def message(request):
     classification=Classification.class_list.get_Class_list()
-	tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
-	date_list=Article.date_list.get_Article_onDate()
-	return render(request,'message.html',locals())
+    tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)
+    date_list=Article.date_list.get_Article_onDate()
+    return render(request,'message.html',locals())

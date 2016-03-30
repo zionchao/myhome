@@ -29,7 +29,7 @@ class TagManager(models.Manager):
 
 class Tag(models.Model):
     name=models.CharField(max_length=20,blank=True)
-    creat_time=models.DateTimeField(auto_now_add=True)
+    create_time=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
     tag_list=TagManager()
 
@@ -52,6 +52,7 @@ class ClassManager(models.Manager):
             posts=temp.article_set.all()
             class_list[i].append(classf[i])
             class_list[i].append(len(posts))
+        return class_list
 
 class Classification(models.Model):
     name=models.CharField(max_length=50)
@@ -65,7 +66,7 @@ class Classification(models.Model):
 
 class ArticleManager(models.Model):
     def get_Article_onDate(self):
-        post_date=Article.objects.datetimes('publish_time','month')
+        post_date=Article.objects.dates('publish_time','month')
         date_list=[]
         for i in range(len(post_date)):
             date_list.append([])
@@ -131,11 +132,10 @@ class Article(models.Model):
         count=0
         for i in temp:
             if i.id==cur.id:
-                if i.id==cur.id:
-                    index=count
-                    break
-                else:
-                    count=count+1
+                index=count
+                break
+            else:
+                count=count+1
         if index!=0:
             return temp[index-1]
 
