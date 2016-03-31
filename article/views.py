@@ -48,7 +48,7 @@ def archive_month(request,year,month):
     articles=Article.objects.filter(publish_time__year=year).fileter(publish_time__month=month)
     paginator=Paginator(articles,6)
     page_num=request.GET.get('page')
-    date_list = Article.date_list.get_Article_onDate()
+    date_list=Article.date_list.get_Article_onDate()
     try:
         articles=paginator.page(page_num)
     except PageNotAnInteger:
@@ -102,7 +102,7 @@ def about(request):
     return render(request,'about.html',locals())
 	
 def archive(request):
-    archive=Article.date_list.get_Article_onArchive()
+    archive=Article.date_list.get_Article_OnArchive()
     ar_newpost=Article.objects.order_by('-publis_time')[:10]
     classfication=Classification.class_list.get_Class_list()
     tagCloud=json.dumps(Tag.tag_list.get_Tag_list(),ensure_ascii=False)

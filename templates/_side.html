@@ -57,7 +57,7 @@
 
 <section id="tag_cloud" class="widget widget_tag_cloud">
     <h3 class="widget-title">标签云</h3>
-    <div id="example" style="width: 286px;heigh:286px;margin-left:-20px;"></div>
+    <div id="example" style="width:286px;height:286px;margin-left:-20px;"></div>
 </section>
 
 <section id="linkcat" class="widget widget_links">
@@ -82,12 +82,11 @@
 
 <script type="text/javascript">
     var list={{tagCloud|safe}};
-	alert(List);
     var word_array=new Array();
-    for(i in list)
+    for( i in list)
     {
         var temp=list[i][0];
-        word_array({text:list[i][0],weight:list[i][1],link:"/articleTag/"+temp});
+        word_array.push({text:list[i][0],weight:list[i][1],link:"/articleTag/"+temp});
     }
 
     $(function(){

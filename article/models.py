@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes
 # Create your models here.
 class Author(models.Model):
     name=models.CharField(max_length=30)
-    email=models.CharField(max_length=50,blank=True)
+    email=models.EmailField(max_length=50,blank=True)
     website=models.URLField(blank=True)
     def __str__(self):
         return force_bytes(self.name)
@@ -66,7 +66,7 @@ class Classification(models.Model):
 
 class ArticleManager(models.Model):
     def get_Article_onDate(self):
-        post_date=Article.objects.dates('publish_time','month')
+        post_date=Article.objects.datetimes('publish_time','month')
         date_list=[]
         for i in range(len(post_date)):
             date_list.append([])
@@ -80,7 +80,7 @@ class ArticleManager(models.Model):
         return date_list
 
     def get_Article_OnArchive(self):
-        post_date=Article.objects.dates('publish_time','month')
+        post_date=Article.objects.datetimes('publish_time','month')
         post_date_article=[]
 
         for i in range(len(post_date)):
